@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.newpackagename // Используй тот, который сгенерировал твой скрипт
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge

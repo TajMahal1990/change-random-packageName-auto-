@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.myapplication"
+    namespace = "com.h5kkx1rrkp"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.myapplication"
+        applicationId = "com.h5kkx1rrkp"
         minSdk = 29
         targetSdk = 34
         versionCode = 1
@@ -48,21 +48,25 @@ dependencies {
 }
 tasks.register("changePackageName") {
     doLast {
-        val newPackageName = "com.${(1..10).map { "abcdefghijklmnopqrstuvwxyz0123456789".random() }.joinToString("")}"
-        val manifestFile = file("src/main/AndroidManifest.xml")
+        // Генерация имени пакета, начинающегося с буквы
+        val letters = "abcdefghijklmnopqrstuvwxyz"
+        val digits = "0123456789"
+        val newPackageName = "com.${letters.random()}${(1..9).map { (letters + digits).random() }.joinToString("")}"
 
+        // Изменение AndroidManifest.xml
+        val manifestFile = file("src/main/AndroidManifest.xml")
         val manifestText = manifestFile.readText()
             .replace(Regex("package=\"[^\"]+\""), "package=\"$newPackageName\"")
         manifestFile.writeText(manifestText)
 
+        // Изменение build.gradle.kts
         val gradleFile = file("build.gradle.kts")
         val gradleText = gradleFile.readText()
-            .replace(Regex("applicationId\\s+\"[^\"]+\""), "applicationId \"$newPackageName\"")
+            .replace(Regex("namespace\\s*=\\s*\"[^\"]+\""), "namespace = \"$newPackageName\"")
+            .replace(Regex("applicationId\\s*=\\s*\"[^\"]+\""), "applicationId = \"$newPackageName\"")
         gradleFile.writeText(gradleText)
 
         // Вывод в Run и Gradle Console
         logger.lifecycle("✅ Новый package name: $newPackageName")
     }
 }
-
-
